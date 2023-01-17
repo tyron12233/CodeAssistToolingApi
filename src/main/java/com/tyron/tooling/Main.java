@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Base64;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
@@ -56,8 +57,8 @@ public class Main {
 
         DomainObjectSet<? extends GradleTask> tasks = model.getTasks();
 
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(tasks.getAt(i));
+        for (GradleTask task : tasks) {
+            System.out.println("Task: " + task.getName());
         }
 
     }

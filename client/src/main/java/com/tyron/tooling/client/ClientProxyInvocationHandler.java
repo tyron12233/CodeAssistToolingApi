@@ -49,7 +49,6 @@ public class ClientProxyInvocationHandler implements InvocationHandler {
         if (args == null) {
             return Collections.emptyList();
         }
-        int current = 0;
         Parameter[] parameters = method.getParameters();
 
         return IntStream.range(0, args.length).mapToObj(index -> {

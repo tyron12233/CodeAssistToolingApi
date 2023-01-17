@@ -85,6 +85,7 @@ public class InvokeHandler extends PacketHandler<Invoke> {
                 || result.getClass().isAssignableFrom(Long.class)
                 || result.getClass().isAssignableFrom(Short.class)
                 || result.getClass().isAssignableFrom(Byte.class)
+                || result.getClass().isAssignableFrom(Boolean.class)
                 || result.getClass().isAssignableFrom(Character.class)
                 || result.getClass().isAssignableFrom(Double.class);
         if (isPrimitive) {

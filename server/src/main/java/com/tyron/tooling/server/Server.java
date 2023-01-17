@@ -9,6 +9,7 @@ import com.tyron.tooling.packet.handler.PacketHandler;
 import com.tyron.tooling.packet.handler.Result;
 import com.tyron.tooling.packet.serializer.GsonHelper;
 import com.tyron.tooling.server.handler.InvokeHandler;
+import org.gradle.internal.impldep.com.google.common.base.Throwables;
 import org.gradle.tooling.GradleConnector;
 import org.gradle.tooling.ProjectConnection;
 
@@ -80,7 +81,7 @@ public class Server {
                         }
                     } else {
                         Throwable exception = handleResult.getException();
-                        InvokeExceptionResult exceptionPacket = new InvokeExceptionResult(exception.getMessage(), packet.getPacketId());
+                        InvokeExceptionResult exceptionPacket = new InvokeExceptionResult(Throwables.getStackTraceAsString(exception), packet.getPacketId());
                         sendPacket(exceptionPacket);
                     }
                 }
