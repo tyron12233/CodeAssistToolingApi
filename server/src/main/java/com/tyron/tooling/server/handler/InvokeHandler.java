@@ -11,6 +11,7 @@ import com.tyron.tooling.server.ObjectStorage;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,7 +29,20 @@ public class InvokeHandler extends PacketHandler<Invoke> {
         String methodName = invoke.getMethodName();
         String packetId = invoke.getPacketId();
         Object[] arguments = getArguments(invoke.getArguments());
-        Class<?>[] argumentTypes = Arrays.stream(arguments).map(Object::getClass).toArray(Class[]::new);
+        Class<?>[] argumentTypes = invoke.getArguments().stream().map(argument -> {
+            if (argument.getObjectId() == null) {
+                if ("null".equals(argument.getClassName())) {
+                    return null;
+                }
+
+                if ("int".equals(argument.getClassName())) {
+                    return int.class;
+                }
+                return argument.getValue().getClass();
+            } else {
+                return ObjectStorage.getInstance().getObject(argument.getObjectId()).getClass();
+            }
+        }).toArray(Class[]::new);
 
         Object object = null;
         Class<?> aClass;
@@ -94,15 +108,23 @@ public class InvokeHandler extends PacketHandler<Invoke> {
     }
 
     private Object[] getArguments(List<Invoke.ArgumentHolder> argumentHolders) {
-        return argumentHolders.stream().map(argumentHolder -> {
-           if (argumentHolder.getObjectId() == null) {
-               if ("null".equals(argumentHolder.getClassName())) {
-                   return null;
-               }
-               return argumentHolder.getValue();
-           } else {
-               return ObjectStorage.getInstance().getObject(argumentHolder.getObjectId());
-           }
-        }).toArray();
+        Object[] arguments = new Object[argumentHolders.size()];
+
+        for (int i = 0; i < arguments.length; i++) {
+            Invoke.ArgumentHolder argumentHolder = argumentHolders.get(i);
+
+            if (argumentHolder.getObjectId() == null) {
+                if ("null".equals(argumentHolder.getClassName())) {
+                    arguments[i] = null;
+                } else {
+                    arguments[i] = argumentHolder.getValue();
+                }
+            } else {
+                arguments[i] = ObjectStorage.getInstance().getObject(argumentHolder.getObjectId());
+            }
+        }
+
+        return arguments;
     }
+
 }

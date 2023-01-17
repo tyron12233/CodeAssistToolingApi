@@ -17,6 +17,7 @@ import java.util.Base64;
 import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.function.Consumer;
 
 
 public class Main {
@@ -46,17 +47,17 @@ public class Main {
 
         // all classes here are now proxies
 
-        try(ProjectConnection projectConnection = Main.newGradleConnector(client)
+        ProjectConnection projectConnection = Main.newGradleConnector(client)
                 .forProjectDirectory(new File(""))
-                .connect()) {
-            GradleProject model = projectConnection.getModel(GradleProject.class);
+                .connect();
+        GradleProject model = projectConnection.getModel(GradleProject.class);
 
-            assert "CodeAssistToolingApi".equals(model.getName());
+        assert "CodeAssistToolingApi".equals(model.getName());
 
-            DomainObjectSet<? extends GradleTask> tasks = model.getTasks();
+        DomainObjectSet<? extends GradleTask> tasks = model.getTasks();
 
-            System.out.println("size: " + tasks.size());
-
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println(tasks.getAt(i));
         }
 
     }
