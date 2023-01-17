@@ -1,0 +1,5 @@
+rootProject.name = 'CodeAssistToolingApi'
+include 'client'
+include 'server'
+include 'shared'
+
