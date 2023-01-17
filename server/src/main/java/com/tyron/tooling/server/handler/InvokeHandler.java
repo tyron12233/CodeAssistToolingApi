@@ -66,11 +66,17 @@ public class InvokeHandler extends PacketHandler<Invoke> {
         }
 
         boolean isPrimitive = Primitives.isPrimitive(result.getClass())
-                || result.getClass().isAssignableFrom(String.class);
+                || result.getClass().isAssignableFrom(String.class)
+                || result.getClass().isAssignableFrom(Integer.class)
+                || result.getClass().isAssignableFrom(Long.class)
+                || result.getClass().isAssignableFrom(Short.class)
+                || result.getClass().isAssignableFrom(Byte.class)
+                || result.getClass().isAssignableFrom(Character.class)
+                || result.getClass().isAssignableFrom(Double.class);
         if (isPrimitive) {
             return Result.success(new InvokePrimitiveResult((Serializable) result, packetId));
         } else {
-            String resultObjectId = result.toString();
+            String resultObjectId = String.valueOf(System.identityHashCode(result));
             ObjectStorage.getInstance().putObject(resultObjectId, result);
 
 

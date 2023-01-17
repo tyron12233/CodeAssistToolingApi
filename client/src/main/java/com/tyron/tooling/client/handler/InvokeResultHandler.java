@@ -8,6 +8,7 @@ import com.tyron.tooling.packet.handler.PacketHandler;
 import com.tyron.tooling.packet.handler.Result;
 
 import java.io.Serializable;
+import java.lang.constant.ConstantDesc;
 import java.lang.reflect.Proxy;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,6 +41,10 @@ public class InvokeResultHandler extends PacketHandler<InvokeResult> {
                 throw new RuntimeException(e);
             }
         }
+
+        interfaces = Arrays.stream(interfaces)
+                .filter(it -> !it.isSealed())
+                .toArray(Class[]::new);
 
         return Result.success(
                 Proxy.newProxyInstance(

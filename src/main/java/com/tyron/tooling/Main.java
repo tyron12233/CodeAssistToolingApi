@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Base64;
+import java.util.HashSet;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -53,7 +54,9 @@ public class Main {
             assert "CodeAssistToolingApi".equals(model.getName());
 
             DomainObjectSet<? extends GradleTask> tasks = model.getTasks();
-            System.out.println(tasks);
+
+            System.out.println("size: " + tasks.size());
+
         }
 
     }
